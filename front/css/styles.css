@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input[type=submit] {
+    position: absolute;
+    top: 5rem;
+    left: 5rem;
+    padding: 5px 15px;
+    /* styles */
+    background-color: #62529c;
+    border: none;
+    color: #fff;
+    padding: 15px 30px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
