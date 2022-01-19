@@ -5,6 +5,17 @@
 head, main {
     padding: 5rem 5rem;
 }
+/* form {
+    display: flex;
+    justify-content: center;
+}
+form div {
+    display: flex;
+    justify-content: center;
+} */
+input {
+    margin: .3rem;
+}
 input[type=submit] {
     /* styles */
     background-color: #62529c;
