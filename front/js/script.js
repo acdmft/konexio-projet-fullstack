@@ -6,7 +6,9 @@ async function startProgram() {
     // clean previous radio choice and input data
     const radioInputs = document.querySelectorAll('input[type=radio]');
     radioInputs[0].checked = true;
-    document.querySelector('input#country').value = "";    
+    document.querySelector('input#country').value = "";
+    //display the list of all countries 
+    getAllCountries();
     // add events to the radio inputs 
     radioInputs.forEach((i)=>{
         i.addEventListener('click', function(){
@@ -22,7 +24,11 @@ async function startProgram() {
     const form = document.querySelector('form');
     form.addEventListener("submit", function(e) {
         e.preventDefault();
-        displayCountry();
+        makeSearch();
+    });
+    const resetBtn = document.querySelector('input#resetPage');
+    resetBtn.addEventListener('click', function() {
+        getAllCountries();
     });
 }
 
@@ -38,7 +44,7 @@ async function makeSearch() {
     // get county information
     let res = await fetch(url);
     res = await res.json();
-    return res;
+    displayCountries(res);
 }
 
 function getSearchType() {
@@ -48,18 +54,17 @@ function getSearchType() {
     return data.getAll('search-param')[0];
 }
 
-async function displayCountry() {
-    let countries = await makeSearch();
+async function displayCountries(countries) {
+    // remove result of previous search 
     let countriesUl = document.querySelector('#ulWithCountries');
     if (countriesUl) {
         countriesUl.remove();
     } 
     document.querySelector('main')
         .insertAdjacentHTML('afterbegin','<ul id="ulWithCountries"></ul>');
-    countries
     countries.forEach((country)=> {
         let li = document.createElement('li');
-        let capital = country.capital[0] ? country.capital[0] : "None";
+        let capital = country.capital ? country.capital : "None";
         let content = '<span>Name: ' + country.name.common + '</span><br>\
                         <span>Capital: ' + capital + '</span><br>\
                         <span>Continent: ' + country.continents[0] + '</span><br><br>';
@@ -67,4 +72,10 @@ async function displayCountry() {
         document.querySelector('#ulWithCountries').appendChild(li);
 
     });      
+}
+
+async function getAllCountries() {
+    let countries = await fetch("https://restcountries.com/v3.1/all")
+    countries = await countries.json();
+    displayCountries(countries);
 }
