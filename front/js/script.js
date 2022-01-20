@@ -3,32 +3,41 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 async function startProgram() {
-	const countries = await getAllCountries();
-    const listOfCountries = countries.map((country) => {
-        return {
-            name: country.name.common,
-            capital: country.capital,
-            continent: country.continents
-        }
+    // form url according to user's choice (country name or capital)
+    const form = document.querySelector('form');
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        displayCountry();
     });
-    document.querySelector('main')
-        .insertAdjacentHTML('afterbegin','<ul id="ulWithCountries"></ul>');
-    listOfCountries.map((country) => {
-        let li = document.createElement('li');
-        let capital = country.capital ? country.capital : 'None';
-        let content = '<span>Name: ' + country.name + '</span><br>\
-                        <span>Capital: ' + capital + '</span><br>\
-                        <span>Continent: ' + country.continent + '</span><br><br>'; 
-        li.insertAdjacentHTML('afterbegin', content);
-        document.querySelector('#ulWithCountries')
-            .appendChild(li);        
-    });
-    console.log(countries[2])
 }
 
-async function getAllCountries() {
-    let countries = await fetch("https://restcountries.com/v3.1/all");
-    countries = await countries.json();
-    console.log('getAllCountries');
-    return countries;
+async function getCountry(url) {
+    let country = await fetch(url);
+    country = await country.json();
+    return country;
 } 
+
+async function makeSearch() {
+    let form = document.querySelector('form');
+    let data = new FormData(form);
+    let searchChoice = data.getAll('search-param')[0];
+    console.log(searchChoice);
+    let searchInput = document.querySelector('#country').value.toLowerCase();
+    let url = `https://restcountries.com/v3.1/${searchChoice}/${searchInput}`;
+    // get county information
+    const country = await getCountry(url);
+    return country;
+}
+
+async function displayCountry() {
+    let country = await makeSearch();
+    document.querySelector('main')
+        .insertAdjacentHTML('afterbegin','<ul id="ulWithCountries"></ul>');        
+    let li = document.createElement('li');
+    let capital = country[0].capital[0] ? country[0].capital[0] : "None";
+    let content = '<span>Name: ' + country[0].name.common + '</span><br>\
+                    <span>Capital: ' + capital + '</span><br>\
+                    <span>Continent: ' + country[0].continents[0] + '</span><br><br>';
+    li.insertAdjacentHTML('afterbegin', content);
+    document.querySelector('#ulWithCountries').appendChild(li);
+}

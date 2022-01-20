@@ -9,20 +9,23 @@
 </head>
 <body>
     <head>
+        <h1>Countries API</h1>
         <form>
             <div>
-                <label for="country">Enter country name/capital</label>
+                <label for="country">Enter country's name/capital</label>
                 <input type="text" id="country">
             </div>
             <div>
-                <label for="countryName">Country</label>
-                <input type="radio" id="countryName" value="name">
+                <label for="countryName">Country name</label>
+                <input type="radio" id="countryName" name="search-param" value="name" checked >
             </div>
             <div>
                 <label for="countryCapital">Capital</label>
-                <input type="radio" id="countryCapital" value="capital">
+                <input type="radio" id="countryCapital" name="search-param" value="capital">
             </div>
-            <input type="submit" id="btnShowData" value="Show Data">
+            <div>
+                <input type="submit" id="btnShowData" value="Show Data">
+            </div>
         </form>
     </head>
     <main>
