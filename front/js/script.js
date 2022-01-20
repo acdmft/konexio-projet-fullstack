@@ -18,35 +18,25 @@ async function startProgram() {
             }
         });
     });
-
-
     form.addEventListener("submit", function(e) {
         e.preventDefault();
-        let typeOfSearch = getSearchType();
-        if (typeOfSearch === 'region') {
-            getRegion();
-            console.log('getRegion');
-        } else {
-            displayCountry();
-            console.log('displayCountry');
-        }
+        displayCountry();
     });
 }
 
-async function getCountry(url) {
-    let country = await fetch(url);
-    country = await country.json();
-    return country;
-} 
-
 async function makeSearch() {
     let searchType = getSearchType();
-    let searchInput = document.querySelector('#country').value.toLowerCase();
-    let url = `https://restcountries.com/v3.1/${searchType}/${searchInput}`;
+    let searchSubj = "";
+    if (searchType === 'region') {
+        searchSubj = document.querySelector('select').value;
+    } else {
+        searchSubj = document.querySelector('#country').value.toLowerCase();
+    }
+    let url = `https://restcountries.com/v3.1/${searchType}/${searchSubj}`;
     // get county information
-    const country = await getCountry(url);
-    console.log(country);
-    return country;
+    let res = await fetch(url);
+    res = await res.json();
+    return res;
 }
 
 function getSearchType() {
@@ -57,22 +47,17 @@ function getSearchType() {
 }
 
 async function displayCountry() {
-    let country = await makeSearch();
+    let countries = await makeSearch();
     document.querySelector('main')
-        .insertAdjacentHTML('afterbegin','<ul id="ulWithCountries"></ul>');        
-    let li = document.createElement('li');
-    let capital = country[0].capital[0] ? country[0].capital[0] : "None";
-    let content = '<span>Name: ' + country[0].name.common + '</span><br>\
-                    <span>Capital: ' + capital + '</span><br>\
-                    <span>Continent: ' + country[0].continents[0] + '</span><br><br>';
-    li.insertAdjacentHTML('afterbegin', content);
-    document.querySelector('#ulWithCountries').appendChild(li);
-}
+        .insertAdjacentHTML('afterbegin','<ul id="ulWithCountries"></ul>');
+    countries.forEach((country)=> {
+        let li = document.createElement('li');
+        let capital = country.capital[0] ? country.capital[0] : "None";
+        let content = '<span>Name: ' + country.name.common + '</span><br>\
+                        <span>Capital: ' + capital + '</span><br>\
+                        <span>Continent: ' + country.continents[0] + '</span><br><br>';
+        li.insertAdjacentHTML('afterbegin', content);
+        document.querySelector('#ulWithCountries').appendChild(li);
 
-async function getRegion() {
-    let region = document.querySelector('select').value;
-    let countries = await fetch(`https://restcountries.com/v3.1/region/${region}`);
-    countries = await countries.json();
-    console.log(countries);
-    
+    });      
 }
