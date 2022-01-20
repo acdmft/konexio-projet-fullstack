@@ -3,10 +3,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 async function startProgram() {
-    // form url according to user's choice (country name or capital)
-    const form = document.querySelector('form');
-    // add events to the radio inputs 
+    // clean previous radio choice and input data
     const radioInputs = document.querySelectorAll('input[type=radio]');
+    radioInputs[0].checked = true;
+    document.querySelector('input#country').value = "";    
+    // add events to the radio inputs 
     radioInputs.forEach((i)=>{
         i.addEventListener('click', function(){
             if (i.value === 'region') {
@@ -18,6 +19,7 @@ async function startProgram() {
             }
         });
     });
+    const form = document.querySelector('form');
     form.addEventListener("submit", function(e) {
         e.preventDefault();
         displayCountry();
