@@ -50,8 +50,13 @@ function getSearchType() {
 
 async function displayCountry() {
     let countries = await makeSearch();
+    let countriesUl = document.querySelector('#ulWithCountries');
+    if (countriesUl) {
+        countriesUl.remove();
+    } 
     document.querySelector('main')
         .insertAdjacentHTML('afterbegin','<ul id="ulWithCountries"></ul>');
+    countries
     countries.forEach((country)=> {
         let li = document.createElement('li');
         let capital = country.capital[0] ? country.capital[0] : "None";
