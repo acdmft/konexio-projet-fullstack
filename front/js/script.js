@@ -7,10 +7,12 @@ async function startProgram() {
     const radioInputs = document.querySelectorAll('input[type=radio]');
     radioInputs[0].checked = true;
     document.querySelector('input#country').value = "";
+    // show spinner
+    document.querySelector('.spinner-border').className="spinner-border d-inline-block";
     //display the list of all countries 
     getAllCountries();
     // add events to the radio inputs 
-    radioInputs.forEach((i)=>{
+    radioInputs.forEach((i) => {
         i.addEventListener('click', function(){
             if (i.value === 'region') {
                 document.querySelector('#selectGroup').style.display = 'block';
@@ -21,11 +23,15 @@ async function startProgram() {
             }
         });
     });
+    // user pushes "Show Data" button
     const form = document.querySelector('form');
+    // show spinner
+    document.querySelector('.spinner-border').className="spinner-border d-inline-block";
     form.addEventListener("submit", function(e) {
         e.preventDefault();
         makeSearch();
     });
+    // user pushes "Reset" button
     const resetBtn = document.querySelector('input#resetPage');
     resetBtn.addEventListener('click', function() {
         getAllCountries();
@@ -41,9 +47,13 @@ async function makeSearch() {
         searchSubj = document.querySelector('#country').value.toLowerCase();
     }
     let url = `https://restcountries.com/v3.1/${searchType}/${searchSubj}`;
+    // show spinner
+    document.querySelector('.spinner-border').className="spinner-border d-inline-block";
     // get county information
     let res = await fetch(url);
     res = await res.json();
+    // hide spinner
+    document.querySelector('.spinner-border').className="spinner-border d-none";
     displayCountries(res);
 }
 
@@ -70,12 +80,15 @@ async function displayCountries(countries) {
                         <span>Continent: ' + country.continents[0] + '</span><br><br>';
         li.insertAdjacentHTML('afterbegin', content);
         document.querySelector('#ulWithCountries').appendChild(li);
-
     });      
 }
 
 async function getAllCountries() {
+    // show spinner
+    document.querySelector('.spinner-border').className="spinner-border d-inline-block";
     let countries = await fetch("https://restcountries.com/v3.1/all")
     countries = await countries.json();
+    // hide spinner
+    document.querySelector('.spinner-border').className="spinner-border d-none";
     displayCountries(countries);
 }
