@@ -2,6 +2,13 @@
     margin: 0;
     padding: 0;
 }
+body { 
+    background-color: black;
+    font-family: 'Titillium Web', sans-serif;
+}
+.titilium {
+    font-family: 'Titillium Web', sans-serif;
+}
 head, main {
     padding: 5rem 5rem;
 }
